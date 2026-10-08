@@ -4,11 +4,9 @@ Projeto individual da **Avaliação G1 — Linguagem de Programação: Análise 
 
 Análise exploratória e dashboard interativo sobre uma base **simulada** de cobertura vacinal (4.440 registros, 37 municípios, 6 vacinas, 2015–2024).
 
-- **Página do projeto (GitHub Pages):** https://SEU-USUARIO.github.io/projeto-g1/
-- **Dashboard (Streamlit Community Cloud):** https://SEU-APP.streamlit.app
-- **Repositório:** https://github.com/SEU-USUARIO/projeto-g1
-
-> Troque `SEU-USUARIO` e `SEU-APP` pelos seus dados nos links acima e no `index.html`.
+- **Página do projeto (GitHub Pages):** https://Math7Braga.github.io/projeto-g1/
+- **Dashboard (Streamlit Community Cloud):** https://projeto-g1-cobertura-vacinal.streamlit.app
+- **Repositório:** https://github.com/Math7Braga/projeto-g1
 
 ## Principais resultados
 - Cobertura ponderada de 84,0%; só 34,8% dos registros atingem a meta e 21,6% estão em nível crítico.
