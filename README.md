@@ -6,7 +6,7 @@ Projeto individual da **Avaliação G1 — Linguagem de Programação: Análise 
 
 **Professor: Alexandre Louzada**
 
-**Materia: Linguagem de Programação**
+**Materia: Linguagens de Programação**
 
 Análise exploratória e dashboard interativo sobre uma base **simulada** de cobertura vacinal (4.440 registros, 37 municípios, 6 vacinas, 2015–2024).
 
