@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cobertura vacinal no Brasil, 2015–2024 · Projeto G1</title>
+<meta name="description" content="Análise e dashboard interativo de cobertura vacinal simulada para 37 municípios brasileiros, 2015–2024.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--tinta:#14233B;--papel:#F3F6F5;--branco:#fff;--teal:#0E7C7B;--laranja:#C2410C;--ambar:#E0A100;--linha:#CBD6D3;--suave:#52627A}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:17px/1.6 "IBM Plex Sans",system-ui,sans-serif;color:var(--tinta);background:var(--papel)}
+h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;line-height:1.1;margin:0}
+a{color:var(--teal)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--ambar);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+header.hero{padding:56px 0 48px;border-bottom:1px solid var(--linha)}
+.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(2.4rem,5vw,3.9rem);font-weight:700;letter-spacing:-.02em}
+.hero p.lead{font-size:1.15rem;max-width:34em;margin:20px 0 24px;color:var(--suave)}
+.curso{font-size:.9rem;color:var(--suave);margin-bottom:18px}
+.botoes{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;padding:11px 18px;border-radius:6px;font-weight:600;text-decoration:none;border:2px solid var(--tinta);color:var(--tinta)}
+.btn.primario{background:var(--tinta);color:#fff}
+.btn:hover{background:var(--teal);border-color:var(--teal);color:#fff}
+/* caderneta: 10 anos x 12 meses */
+.caderneta{background:var(--branco);border:1px solid var(--linha);border-radius:10px;padding:18px 18px 14px}
+.caderneta h2{font-size:1.05rem;margin-bottom:2px}
+.caderneta small{display:block;color:var(--suave);font-size:.82rem;margin-bottom:12px}
+.grade{display:grid;grid-template-columns:34px repeat(12,1fr);gap:3px;align-items:center}
+.grade .ano{font-size:.72rem;color:var(--suave);text-align:right;padding-right:6px}
+.grade .mes{font-size:.65rem;color:var(--suave);text-align:center}
+.cel{aspect-ratio:1;border-radius:3px;cursor:default}
+.cel:hover{outline:2px solid var(--tinta)}
+.legenda{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:.78rem;color:var(--suave)}
+.legenda i{flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,#C2410C,#E0A100,#9FD0CC,#0E7C7B)}
+section{padding:60px 0;border-bottom:1px solid var(--linha)}
+section h2{font-size:clamp(1.7rem,3vw,2.3rem);margin-bottom:18px}
+section p{max-width:44em}
+.indicadores{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--linha);border-radius:10px;background:var(--branco);margin-top:26px}
+.indicadores div{padding:22px 20px;border-right:1px solid var(--linha)}
+.indicadores div:last-child{border-right:0}
+.indicadores b{display:block;font:700 2.3rem/1 "Bricolage Grotesque",sans-serif}
+.indicadores span{font-size:.88rem;color:var(--suave);display:block;margin-top:8px}
+figure{margin:34px 0 0}
+figure img{width:100%;height:auto;background:#fff;border:1px solid var(--linha);border-radius:8px}
+figcaption{margin-top:10px;max-width:46em;font-size:.97rem}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+ul.limpa{padding-left:1.1em;margin:0}
+ul.limpa li{margin-bottom:8px}
+.tech{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.tech span{border:1px solid var(--tinta);border-radius:999px;padding:4px 14px;font-weight:500;font-size:.95rem;background:#fff}
+table{border-collapse:collapse;width:100%;background:#fff;border:1px solid var(--linha);font-size:.95rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--linha);vertical-align:top}
+th{background:var(--tinta);color:#fff;font-weight:600}
+.links a.btn{margin:0 12px 12px 0}
+.conclusao{background:var(--tinta);color:#fff;border:0}
+.conclusao a{color:#9FD0CC}
+.conclusao .wrap>p{color:#D5DEE8}
+footer{padding:28px 0 48px;font-size:.88rem;color:var(--suave)}
+@media(max-width:820px){.hero .wrap,.cols{grid-template-columns:1fr}.indicadores{grid-template-columns:1fr 1fr}.indicadores div:nth-child(2){border-right:0}.indicadores div:nth-child(-n+2){border-bottom:1px solid var(--linha)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="hero">
+ <div class="wrap">
+  <div>
+   <div class="curso">Avaliação G1 · Linguagem de Programação — Análise e Visualização de Dados com Python</div>
+   <h1>A cobertura vacinal fica 5 pontos abaixo da meta</h1>
+   <p class="lead">Análise de 4.440 registros simulados de 37 municípios brasileiros, entre 2015 e 2024: onde a cobertura fica abaixo da meta, quando, e se as campanhas ajudam.</p>
+   <div class="botoes">
+    <a class="btn primario" href="https://SEU-APP.streamlit.app" target="_blank" rel="noopener">Abrir o dashboard</a>
+    <a class="btn" href="https://github.com/SEU-USUARIO/projeto-g1" target="_blank" rel="noopener">Código no GitHub</a>
+   </div>
+  </div>
+  <div class="caderneta" aria-label="Cobertura mensal de 2015 a 2024">
+   <h2>Caderneta de 120 meses</h2>
+   <small>Cada quadrado é um mês. Cor = cobertura ponderada. Passe o mouse para ver o valor.</small>
+   <div class="grade" id="grade" role="img" aria-label="Grade de 10 anos por 12 meses colorida pela cobertura; os valores ficam entre 79,5% e 91,8%"></div>
+   <div class="legenda"><span>79%</span><i></i><span>92%</span></div>
+  </div>
+ </div>
+</header>
+
+<main>
+<section id="problema"><div class="wrap">
+ <h2>O problema</h2>
+ <p>Cobertura vacinal é a parcela do público-alvo que recebeu a vacina. Cada registro da base tem uma meta, de 80% ou 95%. Abaixo dela, aumenta o risco de surtos de doenças evitáveis. Em vez de olhar só a média, o projeto mede <strong>quantos registros ficam abaixo da meta</strong> e procura onde esse problema se concentra.</p>
+ <div class="indicadores">
+  <div><b>84,0%</b><span>cobertura ponderada (doses ÷ população-alvo)</span></div>
+  <div><b>34,8%</b><span>dos registros atingiram a meta</span></div>
+  <div><b>21,6%</b><span>dos registros em nível crítico (15 p.p. ou mais abaixo da meta)</span></div>
+  <div><b>−5,1</b><span>pontos percentuais: distância média da meta</span></div>
+ </div>
+</div></section>
+
+<section id="base"><div class="wrap cols">
+ <div>
+  <h2>A base de dados</h2>
+  <p>Arquivo CSV simulado, um registro por mês × município × vacina, de janeiro de 2015 a dezembro de 2024. Não são números oficiais.</p>
+  <ul class="limpa">
+   <li>4.440 registros, 14 colunas, sem valores ausentes nem duplicatas</li>
+   <li>5 regiões, 20 UFs e 37 municípios</li>
+   <li>6 vacinas: BCG, COVID-19, Hepatite B, Influenza, Poliomielite e Tríplice Viral</li>
+   <li>5 públicos-alvo e metas de 80% ou 95%</li>
+  </ul>
+ </div>
+ <div>
+  <h2>Tratamento</h2>
+  <ul class="limpa">
+   <li>Textos padronizados e datas convertidas para <code>datetime</code></li>
+   <li>Cobertura limitada a 0–100%; 278 registros chegam ao teto de 100%</li>
+   <li>Verificação: a cobertura informada bate com doses ÷ população</li>
+   <li>Atributos novos: <code>gap_meta</code>, <code>atingiu_meta</code>, <code>periodo</code> e grupos de campanhas</li>
+  </ul>
+ </div>
+</div></section>
+
+<section id="achados"><div class="wrap">
+ <h2>O que a análise mostra</h2>
+ <figure>
+  <img src="imagens/02_serie_temporal.png" alt="Linha da cobertura ponderada mensal de 2015 a 2024, com média móvel quase horizontal em torno de 84%" loading="lazy">
+  <figcaption><strong>Sem tendência.</strong> A cobertura anual fica entre 83,2% e 85,5% e a inclinação é de +0,04 p.p. por ano. A oscilação mensal é maior que a diferença entre anos.</figcaption>
+ </figure>
+ <figure>
+  <img src="imagens/03_comparativos.png" alt="Barras de cobertura por vacina, região e público-alvo, todas entre 83% e 85%" loading="lazy">
+  <figcaption><strong>Grupos parecidos.</strong> Vacinas, regiões e públicos-alvo diferem em cerca de 1 p.p. O desvio-padrão entre registros é de 9,6 p.p.: a variação importante está dentro de cada grupo.</figcaption>
+ </figure>
+ <figure>
+  <img src="imagens/05_alerta_regiao.png" alt="Barras empilhadas com a proporção de registros críticos, em atenção e adequados por região" loading="lazy">
+  <figcaption><strong>Alerta em todo o país.</strong> A proporção de registros críticos vai de 18,6% (Sul) a 23,4% (Nordeste).</figcaption>
+ </figure>
+ <figure>
+  <img src="imagens/06_correlacao_campanhas.png" alt="Matriz de correlação e boxplot da cobertura por número de campanhas" loading="lazy">
+  <figcaption><strong>Campanhas não acompanham a cobertura.</strong> A correlação (Spearman) é de 0,002. Com 0, 1 ou 2 campanhas a cobertura média é de cerca de 84%. O grupo com 6 campanhas tem só 4 registros.</figcaption>
+ </figure>
+</div></section>
+
+<section id="projeto"><div class="wrap">
+ <h2>Como o projeto foi construído</h2>
+ <div class="tech"><span>Python</span><span>Pandas</span><span>NumPy</span><span>Matplotlib</span><span>Seaborn</span><span>Plotly</span><span>SQLAlchemy + SQLite</span><span>Streamlit</span><span>GitHub</span></div>
+ <p style="margin-top:22px">O dashboard tem quatro páginas, com filtros por período, região, UF, vacina e público-alvo que atualizam KPIs, gráficos e textos de interpretação.</p>
+ <table>
+  <tr><th>Página</th><th>Conteúdo</th></tr>
+  <tr><td>Visão geral</td><td>KPIs dinâmicos, série temporal, comparativos, distribuição, tabelas, upload de CSV e conclusão executiva</td></tr>
+  <tr><td>Mapa geográfico</td><td>Mapa interativo (Plotly) por município e ranking por UF</td></tr>
+  <tr><td>Correlações</td><td>Matriz de Pearson/Spearman, dispersão e efeito das campanhas</td></tr>
+  <tr><td>Banco de dados</td><td>Modelo relacional em SQLite com SQLAlchemy e consultas com junções</td></tr>
+ </table>
+</div></section>
+
+<section id="links"><div class="wrap links">
+ <h2>Entregas</h2>
+ <a class="btn primario" href="https://SEU-APP.streamlit.app" target="_blank" rel="noopener">Dashboard no Streamlit</a>
+ <a class="btn" href="https://github.com/SEU-USUARIO/projeto-g1" target="_blank" rel="noopener">Repositório no GitHub</a>
+ <a class="btn" href="https://github.com/SEU-USUARIO/projeto-g1/blob/main/notebooks/analise_cobertura_vacinal.ipynb" target="_blank" rel="noopener">Notebook de análise</a>
+</div></section>
+
+<section class="conclusao" id="conclusao"><div class="wrap">
+ <h2>Conclusão</h2>
+ <p>A cobertura média de 84% está abaixo da meta na maioria dos registros (65,2%), e o problema aparece em todas as regiões, vacinas e públicos. Como as diferenças entre grupos são pequenas e a série não tem tendência, não há um recorte único onde concentrar esforços: vale olhar municípios e meses específicos. Nesta base, mais campanhas não vieram acompanhadas de mais cobertura, então o efeito de cada campanha deve ser medido com dados mais detalhados.</p>
+ <p><strong>Limites:</strong> os dados são simulados, a cobertura é derivada de doses e população, e o nível de alerta é função direta da meta. Os resultados ilustram o método e não devem orientar decisões reais.</p>
+</div></section>
+</main>
+<footer><div class="wrap">@Copyright 2025, Projeto individual da Avaliação G1, Todos os direitos reservados a Matheus Braga.</div></footer>
+
+<script>
+const dados=[[81.35, 83.21, 82.92, 84.6, 82.03, 83.81, 81.65, 85.89, 87.47, 87.4, 83.35, 83.84], [86.61, 86.92, 81.5, 82.74, 84.58, 85.66, 84.08, 86.33, 84.31, 82.83, 85.83, 82.91], [82.04, 82.6, 84.17, 83.45, 84.85, 83.68, 85.04, 83.59, 83.61, 85.51, 85.69, 84.2], [82.35, 82.59, 85.32, 84.22, 82.04, 83.63, 85.43, 83.66, 87.45, 82.69, 82.55, 84.89], [85.06, 85.64, 84.57, 80.6, 83.58, 81.97, 82.11, 79.54, 82.44, 85.02, 83.42, 84.37], [84.84, 82.07, 80.06, 81.16, 84.54, 81.94, 82.6, 83.75, 83.23, 86.54, 84.46, 84.59], [81.21, 82.64, 81.7, 84.49, 83.65, 86.26, 86.57, 83.43, 84.65, 83.77, 83.35, 81.1], [83.78, 86.41, 86.16, 82.95, 83.55, 87.04, 81.54, 84.57, 83.5, 83.47, 85.25, 81.44], [84.09, 83.3, 86.75, 83.61, 84.29, 83.59, 83.76, 85.31, 86.53, 85.27, 91.79, 86.92], [84.51, 84.17, 81.96, 82.55, 81.96, 85.05, 84.48, 84.08, 87.65, 84.16, 82.7, 83.26]];
+const g=document.getElementById("grade");
+const meses=["J","F","M","A","M","J","J","A","S","O","N","D"];
+const nomes=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const paradas=[[0,[194,65,12]],[.35,[224,161,0]],[.65,[159,208,204]],[1,[14,124,123]]];
+function cor(v){const t=Math.min(1,Math.max(0,(v-79)/(92-79)));
+ for(let i=1;i<paradas.length;i++){if(t<=paradas[i][0]){const[a,ca]=paradas[i-1],[b,cb]=paradas[i];const k=(t-a)/(b-a);
+  return "rgb("+ca.map((x,j)=>Math.round(x+(cb[j]-x)*k)).join(",")+")";}}return "rgb(14,124,123)";}
+g.appendChild(document.createElement("span"));
+meses.forEach(m=>{const s=document.createElement("span");s.className="mes";s.textContent=m;g.appendChild(s);});
+dados.forEach((linha,i)=>{const a=document.createElement("span");a.className="ano";a.textContent=2015+i;g.appendChild(a);
+ linha.forEach((v,j)=>{const c=document.createElement("span");c.className="cel";c.style.background=cor(v);
+  c.title=nomes[j]+"/"+(2015+i)+": "+v.toFixed(1).replace(".",",")+"%";g.appendChild(c);});});
+</script>
+</body>
+</html>
