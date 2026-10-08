@@ -13,9 +13,11 @@ st.set_page_config(page_title="Cobertura Vacinal no Brasil", page_icon="💉", l
 sns.set_theme(style="whitegrid", context="notebook")
 
 # ---------------------------------------------------------------- cabeçalho
-st.subheader("Nome: Matheus Braga\n
-             Professor: Alexandre Louzada\n  
-             Materia: Linguagens de Programação")
+st.markdown("""
+**Nome:** Matheus Braga  
+**Professor:** Alexandre Louzada  
+**Matéria:** Linguagens de Programação
+""")
 st.title("Cobertura vacinal no Brasil, 2015–2024")
 st.markdown(
     """
