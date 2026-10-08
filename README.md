@@ -1,6 +1,7 @@
 # Cobertura vacinal no Brasil, 2015–2024
 
 Projeto individual da **Avaliação G1 — Linguagem de Programação: Análise e Visualização de Dados com Python**.
+
 **Nome: Matheus Braga**
 **Professor: Alexandre Louzada**
 **Materia: Linguagem de Programação**
